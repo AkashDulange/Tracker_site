@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>60-Day DSA + Web Dev Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      
+      color: #212529;
+    }
+    .dark {
+    background-color: black;
+    color: white;
+   }
+
+     .light {
+    background-color: white;
+    color: black;
+    }
+    
+    textarea, input[type="text"], input[type="date"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    select {
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📆 60-Day DSA + Web Dev Tracker</h1>
+
+  <h2>Daily Log</h2>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>DSA Topic</th>
+      <th>Web Dev Topic</th>
+      <th>Time Spent</th>
+      <th>Mood</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td><input type="date" id="date"></td>
+      <td><input type="text" id="dsa"></td>
+      <td><input type="text" id="web"></td>
+      <td><input type="text" id="time"></td>
+      <td><input type="text" id="mood"></td>
+      <td><input type="text" id="notes"></td>
+    </tr>
+  </table>
+  <button onclick="saveData()">💾 Save Progress</button>
+  <button onclick="loadData()">🔄 Load Progress</button>
+  <button id="mode">Change Mode</button>
+
+  <h2>🧠 Weekly Reflection</h2>
+  <label for="weekSelector">Select Week:</label>
+  <select id="weekSelector" onchange="loadWeeklyData()">
+    <option value="week1">Week 1</option>
+    <option value="week2">Week 2</option>
+    <option value="week3">Week 3</option>
+    <option value="week4">Week 4</option>
+    <option value="week5">Week 5</option>
+    <option value="week6">Week 6</option>
+    <option value="week7">Week 7</option>
+    <option value="week8">Week 8</option>
+  </select>
+
+  <textarea id="weekly1" placeholder="What did I complete this week?"></textarea>
+  <textarea id="weekly2" placeholder="What distracted me this week?"></textarea>
+  <textarea id="weekly3" placeholder="What can I improve next week?"></textarea>
+  <textarea id="weekly4" placeholder="Top 3 goals for next week..."></textarea>
+
+  <h2>🎯 Goal Tracker</h2>
+  <textarea id="goals" placeholder="Write your monthly and weekly goals here..."></textarea>
+
+  <h2>💻 Project Board</h2>
+  <textarea id="projects" placeholder="Portfolio, Notes App, Weather App - Status, GitHub, Demo..."></textarea>
+
+  <h2>📚 Resource Vault</h2>
+  <ul>
+    <li><a href="https://takeuforward.org/interviews/strivers-a2z-dsa-course-sheet-2/" target="_blank">Striver A2Z Sheet</a></li>
+    <li><a href="https://www.youtube.com/playlist?list=PLwGdqUZWnOp0yNn4vJ8iR8uQd9ZC8Y__m" target="_blank">Apna College JS Playlist</a></li>
+    <li>Angela Yu Udemy Course</li>
+    <li>Resume Templates</li>
+    <li>Your GitHub Links</li>
+  </ul>
+
+  <script>
+    let modeBtn = document.querySelector("#mode");
+    let currMode = "Light";
+    let body = document.querySelector("body");
+    function saveData() {
+      const fields = ['date','dsa','web','time','mood','notes','goals','projects'];
+      fields.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).value);
+      });
+
+      const week = document.getElementById('weekSelector').value;
+      for (let i = 1; i <= 4; i++) {
+        const key = `${week}_weekly${i}`;
+        localStorage.setItem(key, document.getElementById(`weekly${i}`).value);
+      }
+      alert("Progress saved locally ✅");
+    }
+
+    function loadData() {
+      const fields = ['date','dsa','web','time','mood','notes','goals','projects'];
+      fields.forEach(id => {
+        document.getElementById(id).value = localStorage.getItem(id) || '';
+      });
+      loadWeeklyData();
+    }
+
+    function loadWeeklyData() {
+      const week = document.getElementById('weekSelector').value;
+      for (let i = 1; i <= 4; i++) {
+        const key = `${week}_weekly${i}`;
+        document.getElementById(`weekly${i}`).value = localStorage.getItem(key) || '';
+      }
+    }
+    modeBtn.addEventListener("click", () => {
+    if (currMode === "Light") {
+        currMode = "Dark";
+        body.classList.add("dark");
+        body.classList.remove("light");
+    } else {
+        currMode = "Light";
+        body.classList.add("light");
+        body.classList.remove("dark");
+    }
+    console.log(currMode);
+});
+
+    window.onload = loadData;
+  </script>
+</body>
+</html>
